@@ -4,7 +4,6 @@ import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,29 +13,22 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.bootcamp.productbackend.models.Category;
 import com.bootcamp.productbackend.models.Product;
-import com.bootcamp.productbackend.repositories.CategoryRepository;
-import com.bootcamp.productbackend.repositories.ProductRepository;
+import com.bootcamp.productbackend.services.ProductService;
 
 @RestController
 @CrossOrigin
 public class ProductController {
 
     @Autowired
-    private ProductRepository productRepository;
-
-    @Autowired
-    private CategoryRepository categoryRepository;
+    private ProductService productService;
     
     @GetMapping("products/{id}")
     public ResponseEntity<Product> getProduct(@PathVariable int id) {
 
-        Product product = productRepository.findById(id)
-                                           .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found"));
+        Product product = productService.getById(id);
                                   
         return ResponseEntity.ok(product);
     }
@@ -44,13 +36,13 @@ public class ProductController {
     @GetMapping("products")
     public List<Product> getProducts() {
 
-        return productRepository.findAll();
+        return productService.getAll();
     }
 
     @PostMapping("products")
     public ResponseEntity<Product> save(@RequestBody Product product) {
 
-        product = productRepository.save(product);
+        product = productService.save(product);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -64,10 +56,7 @@ public class ProductController {
     @DeleteMapping("products/{id}")
     public ResponseEntity<Void> removeProduct(@PathVariable int id) {
 
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found"));
-
-        productRepository.delete(product);
+        productService.deleteById(id);
 
         return ResponseEntity.noContent().build();
     }
@@ -75,23 +64,7 @@ public class ProductController {
     @PutMapping("products/{id}")
     public ResponseEntity<Void> updateProduct(@PathVariable int id, @RequestBody Product productUpdate) {
 
-        Product product = productRepository.findById(id)
-                                           .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found"));
-        
-        if(productUpdate.getCategory() == null)
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Category can not be empty");
-        
-        Category category = categoryRepository.findById(productUpdate.getCategory().getId())
-                                              .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found"));
-        
-        product.setDescription(productUpdate.getDescription());
-        product.setName(productUpdate.getName());
-        product.setPrice(productUpdate.getPrice());
-        product.setNewProduct(productUpdate.isNewProduct());
-        product.setPromotion(productUpdate.isPromotion());
-        product.setCategory(category);
-        
-        productRepository.save(product);
+        productService.update(id, productUpdate);
 
         return ResponseEntity.ok().build();
     }
