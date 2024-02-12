@@ -3,29 +3,26 @@ package com.bootcamp.productbackend.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.bootcamp.productbackend.models.Category;
-import com.bootcamp.productbackend.repositories.CategoryRepository;
+import com.bootcamp.productbackend.services.CategoryService;
 
 @RestController
 @CrossOrigin
 public class CategoryController {
 
     @Autowired
-    private CategoryRepository categoryRepository;
+    private CategoryService categoryService;
     
     @GetMapping("categories/{id}")
     public ResponseEntity<Category> getCategory(@PathVariable int id) {
 
-        Category category = categoryRepository.findById(id)
-                                  .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found"));
+        Category category = categoryService.getById(id);
                                   
         return ResponseEntity.ok(category);
     }
@@ -33,6 +30,6 @@ public class CategoryController {
     @GetMapping("categories")
     public List<Category> getCategories() {
 
-        return categoryRepository.findAll();
+        return categoryService.getAll();
     }
 }
