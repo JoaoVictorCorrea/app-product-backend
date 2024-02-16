@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -20,12 +21,13 @@ import com.bootcamp.productbackend.services.ProductService;
 
 @RestController
 @CrossOrigin
+@RequestMapping("products")
 public class ProductController {
 
     @Autowired
     private ProductService productService;
     
-    @GetMapping("products/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<Product> getProduct(@PathVariable int id) {
 
         Product product = productService.getById(id);
@@ -33,13 +35,13 @@ public class ProductController {
         return ResponseEntity.ok(product);
     }
     
-    @GetMapping("products")
-    public List<Product> getProducts() {
+    @GetMapping
+    public ResponseEntity<List<Product>> getProducts() {
 
-        return productService.getAll();
+        return ResponseEntity.ok(productService.getAll()); 
     }
 
-    @PostMapping("products")
+    @PostMapping
     public ResponseEntity<Product> save(@RequestBody Product product) {
 
         product = productService.save(product);
@@ -53,7 +55,7 @@ public class ProductController {
         return ResponseEntity.created(location).body(product);
     }
 
-    @DeleteMapping("products/{id}")
+    @DeleteMapping("{id}")
     public ResponseEntity<Void> removeProduct(@PathVariable int id) {
 
         productService.deleteById(id);
@@ -61,7 +63,7 @@ public class ProductController {
         return ResponseEntity.noContent().build();
     }
     
-    @PutMapping("products/{id}")
+    @PutMapping("{id}")
     public ResponseEntity<Void> updateProduct(@PathVariable int id, @RequestBody Product productUpdate) {
 
         productService.update(id, productUpdate);
