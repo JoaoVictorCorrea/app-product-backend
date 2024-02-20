@@ -2,6 +2,7 @@ package com.bootcamp.productbackend.models;
 
 import java.io.Serializable;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,7 +17,11 @@ public class Product implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
     private String name;
+    
+    @Column(nullable = false, length = 1024)
     private String description;
     private Double price;
 
@@ -25,6 +30,8 @@ public class Product implements Serializable {
 
     private boolean promotion;
     private boolean newProduct;
+
+    public Product(){}
     
     public Product(Long id, String name, String description, Double price, Category category, boolean promotion,
             boolean newProduct) {
@@ -42,8 +49,6 @@ public class Product implements Serializable {
         this.name = name;
         this.price = price;
     }
-    
-    public Product(){}
 
     public Long getId() {
         return id;
