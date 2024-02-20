@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.bootcamp.productbackend.dtos.CategoryRequestDTO;
+import com.bootcamp.productbackend.dtos.CategoryResponseDTO;
 import com.bootcamp.productbackend.models.Category;
 import com.bootcamp.productbackend.services.CategoryService;
 
@@ -43,9 +45,9 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<Category> save(@Validated @RequestBody Category category) {
+    public ResponseEntity<CategoryResponseDTO> save(@Validated @RequestBody CategoryRequestDTO categoryRequest) {
 
-        category = categoryService.save(category);
+        CategoryResponseDTO category = categoryService.save(categoryRequest);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()

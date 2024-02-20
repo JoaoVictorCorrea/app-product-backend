@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.bootcamp.productbackend.dtos.CategoryRequestDTO;
+import com.bootcamp.productbackend.dtos.CategoryResponseDTO;
 import com.bootcamp.productbackend.models.Category;
 import com.bootcamp.productbackend.repositories.CategoryRepository;
 
@@ -29,9 +31,10 @@ public class CategoryService {
         return categoryRepository.findAll();
     }
     
-    public Category save(Category category) {
+    public CategoryResponseDTO save(CategoryRequestDTO categoryRequest) {
 
-        return categoryRepository.save(category);
+        Category category = categoryRepository.save(categoryRequest.toEntity());
+        return category.toDTO();
     }
     
     public void deleteById(int id) {
