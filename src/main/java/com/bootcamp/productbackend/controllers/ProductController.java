@@ -17,8 +17,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.bootcamp.productbackend.models.Product;
+import com.bootcamp.productbackend.dtos.ProductRequestDTO;
+import com.bootcamp.productbackend.dtos.ProductResponseDTO;
 import com.bootcamp.productbackend.services.ProductService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @CrossOrigin
@@ -29,23 +32,23 @@ public class ProductController {
     private ProductService productService;
     
     @GetMapping("{id}")
-    public ResponseEntity<Product> getProduct(@PathVariable long id) {
+    public ResponseEntity<ProductResponseDTO> getProduct(@PathVariable long id) {
 
-        Product product = productService.getById(id);
+        ProductResponseDTO product = productService.getDTOById(id);
                                   
         return ResponseEntity.ok(product);
     }
     
     @GetMapping
-    public ResponseEntity<List<Product>> getProducts() {
+    public ResponseEntity<List<ProductResponseDTO>> getProducts() {
 
         return ResponseEntity.ok(productService.getAll()); 
     }
 
     @PostMapping
-    public ResponseEntity<Product> save(@Validated @RequestBody Product product) {
+    public ResponseEntity<ProductResponseDTO> save(@Validated @RequestBody ProductRequestDTO productRequest) {
 
-        product = productService.save(product);
+        ProductResponseDTO product = productService.save(productRequest);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -65,7 +68,7 @@ public class ProductController {
     }
     
     @PutMapping("{id}")
-    public ResponseEntity<Void> updateProduct(@PathVariable long id, @RequestBody Product productUpdate) {
+    public ResponseEntity<Void> updateProduct(@PathVariable long id, @Valid @RequestBody ProductRequestDTO productUpdate) {
 
         productService.update(id, productUpdate);
 

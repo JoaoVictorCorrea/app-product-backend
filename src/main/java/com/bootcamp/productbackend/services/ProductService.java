@@ -1,12 +1,15 @@
 package com.bootcamp.productbackend.services;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.bootcamp.productbackend.dtos.ProductRequestDTO;
+import com.bootcamp.productbackend.dtos.ProductResponseDTO;
 import com.bootcamp.productbackend.models.Category;
 import com.bootcamp.productbackend.models.Product;
 import com.bootcamp.productbackend.repositories.ProductRepository;
@@ -27,15 +30,25 @@ public class ProductService {
 
         return product;
     }
-    
-    public List<Product> getAll() {
 
-        return productRepository.findAll();
+    public ProductResponseDTO getDTOById(long id) {
+
+        Product product = getById(id);
+        return product.toDTO();
     }
     
-    public Product save(Product product) {
+    public List<ProductResponseDTO> getAll() {
 
-        return productRepository.save(product);
+        return productRepository.findAll()
+                                .stream()
+                                .map(p -> p.toDTO())
+                                .collect(Collectors.toList());
+    }
+    
+    public ProductResponseDTO save(ProductRequestDTO productRequest) {
+
+        Product product = productRepository.save(productRequest.toEntity());
+        return product.toDTO();
     }
     
     public void deleteById(long id) {
@@ -45,7 +58,7 @@ public class ProductService {
         productRepository.delete(product);
     }
     
-    public void update(long id, Product productUpdate) {
+    public void update(long id, ProductRequestDTO productUpdate) {
         
         Product product = getById(id);
         

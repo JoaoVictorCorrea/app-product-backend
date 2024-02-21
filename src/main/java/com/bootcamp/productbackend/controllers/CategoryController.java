@@ -21,6 +21,8 @@ import com.bootcamp.productbackend.dtos.CategoryRequestDTO;
 import com.bootcamp.productbackend.dtos.CategoryResponseDTO;
 import com.bootcamp.productbackend.services.CategoryService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @CrossOrigin
 @RequestMapping("categories")
@@ -66,7 +68,7 @@ public class CategoryController {
     }
     
     @PutMapping("{id}")
-    public ResponseEntity<Void> updateCategory(@PathVariable int id, @RequestBody CategoryRequestDTO categoryUpdate) {
+    public ResponseEntity<Void> updateCategory(@PathVariable int id, @Valid @RequestBody CategoryRequestDTO categoryUpdate) {
 
         categoryService.update(id, categoryUpdate);
 

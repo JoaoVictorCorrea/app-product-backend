@@ -22,7 +22,11 @@ public class Category implements Serializable {
     @Column(nullable = false, unique = true, length = 255)
     private String name;
 
-    public Category() {
+    public Category() {}
+
+    public Category(Integer id) {
+        
+        this.id = id;
     }
     
     public Category(String name) {
