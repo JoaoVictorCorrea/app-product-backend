@@ -19,7 +19,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.bootcamp.productbackend.dtos.CategoryRequestDTO;
 import com.bootcamp.productbackend.dtos.CategoryResponseDTO;
-import com.bootcamp.productbackend.models.Category;
 import com.bootcamp.productbackend.services.CategoryService;
 
 @RestController
@@ -31,15 +30,15 @@ public class CategoryController {
     private CategoryService categoryService;
     
     @GetMapping("{id}")
-    public ResponseEntity<Category> getCategory(@PathVariable int id) {
+    public ResponseEntity<CategoryResponseDTO> getCategory(@PathVariable int id) {
 
-        Category category = categoryService.getById(id);
-                                  
+        CategoryResponseDTO category = categoryService.getDTOById(id);
+
         return ResponseEntity.ok(category);
     }
     
     @GetMapping
-    public ResponseEntity<List<Category>> getCategories() {
+    public ResponseEntity<List<CategoryResponseDTO>> getCategories() {
 
         return ResponseEntity.ok(categoryService.getAll()); 
     }
@@ -67,7 +66,7 @@ public class CategoryController {
     }
     
     @PutMapping("{id}")
-    public ResponseEntity<Void> updateCategory(@PathVariable int id, @RequestBody Category categoryUpdate) {
+    public ResponseEntity<Void> updateCategory(@PathVariable int id, @RequestBody CategoryRequestDTO categoryUpdate) {
 
         categoryService.update(id, categoryUpdate);
 

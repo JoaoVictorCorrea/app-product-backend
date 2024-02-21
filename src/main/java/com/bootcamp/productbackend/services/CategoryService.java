@@ -1,6 +1,7 @@
 package com.bootcamp.productbackend.services;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,10 +26,21 @@ public class CategoryService {
 
         return category;
     }
-    
-    public List<Category> getAll() {
 
-        return categoryRepository.findAll();
+    public CategoryResponseDTO getDTOById(int id) {
+
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found"));
+
+        return category.toDTO();
+    }
+    
+    public List<CategoryResponseDTO> getAll() {
+
+        return categoryRepository.findAll()
+                                 .stream()
+                                 .map(c -> c.toDTO())
+                                 .collect(Collectors.toList());
     }
     
     public CategoryResponseDTO save(CategoryRequestDTO categoryRequest) {
@@ -44,7 +56,7 @@ public class CategoryService {
         categoryRepository.delete(category);
     }
     
-    public void update(int id, Category categoryUpdate) {
+    public void update(int id, CategoryRequestDTO categoryUpdate) {
         
         Category category = getById(id); 
         category.setName(categoryUpdate.getName());
