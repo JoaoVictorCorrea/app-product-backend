@@ -5,9 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.bootcamp.productbackend.dtos.CategoryRequestDTO;
 import com.bootcamp.productbackend.dtos.CategoryResponseDTO;
@@ -26,7 +24,7 @@ public class CategoryService {
     public CategoryResponseDTO getById(int id) {
 
         Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Category not found"));
 
         return category.toDTO();
     }

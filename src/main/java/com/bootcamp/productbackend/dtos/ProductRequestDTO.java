@@ -16,7 +16,7 @@ public class ProductRequestDTO {
     private String name;
     
     @NotBlank(message = "Description can not be blank")
-    @Size(min = 3, max = 1024, message = "Name length min=3 and max=1024")
+    @Size(min = 3, max = 1024, message = "Description length min=3 and max=1024")
     private String description;
 
     @Min(value = 0, message = "Price min value = 0")
