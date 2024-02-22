@@ -1,4 +1,4 @@
-package com.bootcamp.productbackend.exceptions;
+package com.bootcamp.productbackend.controllers.exceptions;
 
 import java.util.ArrayList;
 import java.util.List;
